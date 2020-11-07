@@ -123,6 +123,8 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'billy_api' => '35eebe5923417253f68e1cb2abb4eeb85c060277',
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
