@@ -77,6 +77,21 @@ class Billy extends Controller
 	}
 
 	/**
+	 * Delete contact in Billy
+	 *
+	 * @param array $body
+	 * @param string $id
+	 * @return string $id
+	 */
+	function delete_contact($id) {
+
+	    $res = $this->request("DELETE", "/contacts/{$id}");
+
+	    // return the deleted id
+	    return $res->meta->deletedRecords->contacts[0];
+	}
+
+	/**
 	 * Create product in Billy
 	 * and return the id of the newly
 	 * created product

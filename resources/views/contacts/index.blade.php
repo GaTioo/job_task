@@ -19,6 +19,16 @@
             <a href="/products/create" class="alert-link">Add contacts</a>
         </div>
 
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+            </ul>
+        </div>
+        @endif
+
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-12">
@@ -26,6 +36,13 @@
                         @forelse ($contacts as $contact)
                             <div class="card-body">
                                 <h5 class="card-title"><a href="/contacts/{{$contact->id}}/edit">{{$contact->name}}</a></h5>
+                                <form method="POST" action="{{ route('contacts.destroy', $contact->id) }}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-primary">
+                                        {{ __('Delete') }}
+                                    </button>
+                                </form>
                             </div>
                         @empty
                             <div class="card-body">

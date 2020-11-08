@@ -108,7 +108,21 @@ class ContactController extends Controller
      */
     public function destroy($id)
     {
-        //
+		$contact = Contact::findOrFail($id);
+
+		// first try to delete
+		// from the Billy
+		try {
+			$billy = new Billy();
+			$billy_id = $billy->delete_contact($contact->external_id);
+		} catch (Exception $e) {
+			return redirect()->back()->withInput()->withErrors(['exception' => $e->getMessage()]);
+		}
+
+		// delete in system db
+		$contact->delete();
+
+		return redirect('/contacts');
     }
 
     /**
@@ -122,6 +136,7 @@ class ContactController extends Controller
     public function billy_contact_fields($fields) {
 
     	// removing laravel token
+    	// and method
     	unset($fields['_token']);
     	unset($fields['_method']);
 
