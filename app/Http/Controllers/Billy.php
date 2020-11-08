@@ -47,64 +47,84 @@ class Billy extends Controller
     }
 
 	/**
-	 * Create contact in Billy
+	 * Create object in Billy
 	 * and return the id of the newly
-	 * created contact
+	 * created object
 	 *
 	 * @param array $body
+	 * @param string $type
 	 * @return string $id
 	 */
-	function create_contact(array $body) {
+	function create_object(array $body, $type) {
 
-	    $res = $this->request("POST", "/contacts", array('contact' => $body));
+	    $res = $this->request("POST", "/{$type}", $body);
 
-	    return $res->contacts[0]->id;
+	    return $res->{$type}[0]->id;
 	}
 
 
 	/**
-	 * Update contact in Billy
+	 * Update object in Billy
 	 *
 	 * @param array $body
 	 * @param string $id
+	 * @param string $type
 	 * @return string $id
 	 */
-	function update_contact(array $body, $id) {
+	function update_object(array $body, $id, $type) {
 
-	    $res = $this->request("PUT", "/contacts/{$id}", array('contact' => $body));
+	    $res = $this->request("PUT", "/{$type}/{$id}", $body);
 
-	    return $res->contacts[0]->id;
+	    return $res->{$type}[0]->id;
 	}
 
 	/**
-	 * Delete contact in Billy
+	 * Delete object in Billy
 	 *
-	 * @param array $body
 	 * @param string $id
+	 * @param string $type
 	 * @return string $id
 	 */
-	function delete_contact($id) {
+	function delete_object($id, $type) {
 
-	    $res = $this->request("DELETE", "/contacts/{$id}");
+	    $res = $this->request("DELETE", "/{$type}/{$id}");
 
 	    // return the deleted id
 	    // or just true, because can be already deleted
-	    return isset($res->meta->deletedRecords->contacts[0]) ? $res->meta->deletedRecords->contacts[0] : true;
+	    return isset($res->meta->deletedRecords->{$type}[0]) ? $res->meta->deletedRecords->{$type}[0] : true;
 	}
 
 	/**
-	 * Create product in Billy
-	 * and return the id of the newly
-	 * created product
+	 * Extract and prepare needed fields
+	 * to send them with the request
+	 * to Billy
 	 *
-	 * @param array $body
-	 * @return string $id
+	 * @param array $fields
+	 * @return array $prepared_fields
 	 */
-	function create_product(array $body) {
+	public function billy_fields($fields) {
 
-	    $res = $client->request("POST", "/products", array('product' => $body));
+		// removing laravel token
+		// and method
+		unset($fields['_token']);
+		unset($fields['_method']);
 
-	    return $res->products[0]->id;
+		$prepared_fields = array();
+		foreach ($fields as $key => $value) {
+			// if there is _ in the key
+			if (strpos($key, '_') !== false) {
+				// replace it with whitespace
+				// uppercase first letter of every word
+				// remove all whitespaces
+				// and lowercase first latter
+			    $key = lcfirst(str_replace(' ', '', (ucwords(str_replace('_', ' ', $key)))));
+			}
+
+			$prepared_fields[$key] = $value;
+		}
+
+		return $prepared_fields;
+
 	}
 
 }

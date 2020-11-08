@@ -41,10 +41,10 @@ class ContactController extends Controller
 
     	$billy = resolve('Billy');
 
-    	$fields = $this->billy_contact_fields($request->all());
+    	$fields = $billy->billy_fields($request->all());
 
     	try {
-    		$billy_id = $billy->create_contact($fields);
+    		$billy_id = $billy->create_object(array('contact' => $fields), 'contacts');
 
     		$contact->external_id = $billy_id;
 
@@ -65,7 +65,6 @@ class ContactController extends Controller
      */
     public function edit($id)
     {
-
     	$contact =  Contact::findOrFail($id);
 
         return view('contacts.edit', compact('contact'));
@@ -84,10 +83,10 @@ class ContactController extends Controller
 
     	$billy = resolve('Billy');
 
-    	$fields = $this->billy_contact_fields($request->all());
+    	$fields = $billy->billy_fields($request->all());
 
     	try {
-    		$billy_id = $billy->update_contact($fields, $contact->external_id);
+    		$billy_id = $billy->update_object(array('contact' => $fields), $contact->external_id, 'contacts');
 
     		$contact->fill($request->all());
 
@@ -114,7 +113,7 @@ class ContactController extends Controller
 		// from the Billy
 		try {
 			$billy = resolve('Billy');
-			$billy->delete_contact($contact->external_id);
+			$billy->delete_object($contact->external_id, 'contacts');
 		} catch (Exception $e) {
 			return redirect()->back()->withInput()->withErrors(['exception' => $e->getMessage()]);
 		}
@@ -123,38 +122,5 @@ class ContactController extends Controller
 		$contact->delete();
 
 		return redirect('/contacts');
-    }
-
-    /**
-     * Extract and prepare needed fields
-     * to send them with the request
-     * to Billy
-     *
-     * @param array $fields
-     * @return array $prepared_fields
-     */
-    public function billy_contact_fields($fields) {
-
-    	// removing laravel token
-    	// and method
-    	unset($fields['_token']);
-    	unset($fields['_method']);
-
-    	$prepared_fields = array();
-    	foreach ($fields as $key => $value) {
-    		// if there is _ in the key
-    		if (strpos($key, '_') !== false) {
-    			// replace it with whitespace
-    			// uppercase first letter of every word
-    			// remove all whitespaces
-    			// and lowercase first latter
-    		    $key = lcfirst(str_replace(' ', '', (ucwords(str_replace('_', ' ', $key)))));
-    		}
-
-    		$prepared_fields[$key] = $value;
-    	}
-
-    	return $prepared_fields;
-
     }
 }

@@ -16,7 +16,7 @@
             <a href="/contacts" class="alert-link">All contacts</a> |
             <a href="/contacts/create" class="alert-link">Add contacts</a> |
             <a href="/products" class="alert-link">All products</a> |
-            <a href="/products/create" class="alert-link">Add contacts</a>
+            <a href="/products/create" class="alert-link">Add products</a>
         </div>
 
         @if ($errors->any())
@@ -38,23 +38,6 @@
 
                             <br>
                             <div class="form-group row">
-                                <label for="name" class="col-md-2 col-form-label text-md-right">{{ __('Type') }}</label>
-
-                                <div class="col-md-10">
-                                    <select id="type" class="form-control @error('name') is-invalid @enderror" name="type">
-                                        <option value="company">{{ __('Company') }}</option>
-                                        <option value="person">{{ __('Person') }}</option>
-                                    </select>
-
-                                    @error('name')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
                                 <label for="name" class="col-md-2 col-form-label text-md-right">{{ __('Name') }}</label>
 
                                 <div class="col-md-10">
@@ -69,12 +52,12 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="country_id" class="col-md-2 col-form-label text-md-right">{{ __('Country') }}</label>
+                                <label for="product_no" class="col-md-2 col-form-label text-md-right">{{ __('Product No') }}</label>
 
                                 <div class="col-md-10">
-                                    <input id="country_id" type="text" class="form-control @error('country_id') is-invalid @enderror" name="country_id" value="{{ old('country_id') }}" required autocomplete="country_id" autofocus>
+                                    <input id="product_no" type="text" class="form-control @error('product_no') is-invalid @enderror" name="product_no" value="{{ old('product_no') }}" required autocomplete="product_no" autofocus>
 
-                                    @error('country_id')
+                                    @error('product_no')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -83,12 +66,12 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="payment_terms_days" class="col-md-2 col-form-label text-md-right">{{ __('Payment Terms Days') }}</label>
+                                <label for="description" class="col-md-2 col-form-label text-md-right">{{ __('Description') }}</label>
 
                                 <div class="col-md-10">
-                                    <input id="payment_terms_days" type="text" class="form-control @error('payment_terms_days') is-invalid @enderror" name="payment_terms_days" value="{{ old('payment_terms_days') }}" required autocomplete="payment_terms_days" autofocus>
+                                    <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{ old('description') }}" required autocomplete="description" autofocus>
 
-                                    @error('payment_terms_days')
+                                    @error('description')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>

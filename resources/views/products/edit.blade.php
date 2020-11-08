@@ -16,7 +16,7 @@
             <a href="/contacts" class="alert-link">All contacts</a> |
             <a href="/contacts/create" class="alert-link">Add contacts</a> |
             <a href="/products" class="alert-link">All products</a> |
-            <a href="/products/create" class="alert-link">Add contacts</a>
+            <a href="/products/create" class="alert-link">Add products</a>
         </div>
 
         @if ($errors->any())
@@ -33,7 +33,7 @@
             <div class="row justify-content-center">
                 <div class="col-md-12">
                     <div class="card">
-                        <form method="POST" action="{{ route('contacts.update', $contact->id) }}">
+                        <form method="POST" action="{{ route('products.update', $contact->id) }}">
                             @csrf
                             @method('PUT')
                             <br>
@@ -98,7 +98,7 @@
 
                             <div class="form-group row mb-0">
                                 <div class="col-md-8 offset-md-5">
-                                    <a href="{{ route('contacts.index') }}" class="btn btn-warning">
+                                    <a href="{{ route('products.index') }}" class="btn btn-warning">
                                         {{ __('Cancel') }}
                                     </a>
                                     <button type="submit" class="btn btn-primary">

@@ -16,7 +16,7 @@
             <a href="/contacts" class="alert-link">All contacts</a> |
             <a href="/contacts/create" class="alert-link">Add contacts</a> |
             <a href="/products" class="alert-link">All products</a> |
-            <a href="/products/create" class="alert-link">Add contacts</a>
+            <a href="/products/create" class="alert-link">Add products</a>
         </div>
 
         @if ($errors->any())
@@ -46,7 +46,7 @@
                             </div>
                         @empty
                             <div class="card-body">
-                                <p class="card-text">products list is empty.</p>
+                                <p class="card-text">Products list is empty.</p>
                             </div>
                         @endforelse
                     </div>

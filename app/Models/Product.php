@@ -15,6 +15,13 @@ class Product extends Model
      * @var array
      */
     protected $fillable = [
-        'type', 'name', 'country_id', 'payment_terms_days'
+        'product_no', 'name', 'description'
     ];
+
+
+    public function prices()
+    {
+        return $this->hasMany('App\Price');
+    }
+
 }
