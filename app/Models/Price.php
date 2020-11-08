@@ -9,10 +9,13 @@ class Price extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+    	'product_id', 'external_id', 'unit_price'
+    ];
 
-    public function author()
+    public function product()
     {
-        return $this->belongsTo('App\Product', 'product_id');
+        return $this->belongsTo('\App\Models\Product', 'product_id');
     }
 
 }

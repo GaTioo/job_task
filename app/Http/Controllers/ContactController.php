@@ -44,9 +44,9 @@ class ContactController extends Controller
     	$fields = $billy->billy_fields($request->all());
 
     	try {
-    		$billy_id = $billy->create_object(array('contact' => $fields), 'contacts');
+    		$billy_contact = $billy->create_object(array('contact' => $fields), 'contacts');
 
-    		$contact->external_id = $billy_id;
+    		$contact->external_id = $billy_contact->contacts[0]->id;
 
     		$contact->save();
     	} catch (\Exception $e) {

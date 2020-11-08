@@ -56,7 +56,7 @@
                                 <label for="product_no" class="col-md-2 col-form-label text-md-right">{{ __('Product No') }}</label>
 
                                 <div class="col-md-10">
-                                    <input id="product_no" type="text" class="form-control @error('product_no') is-invalid @enderror" name="product_no" value="{{ $contact->product_no }}" required autocomplete="product_no" autofocus>
+                                    <input id="product_no" type="text" class="form-control @error('product_no') is-invalid @enderror" name="product_no" value="{{ $product->product_no }}" required autocomplete="product_no" autofocus>
 
                                     @error('product_no')
                                         <span class="invalid-feedback" role="alert">
@@ -70,7 +70,7 @@
                                 <label for="description" class="col-md-2 col-form-label text-md-right">{{ __('Description') }}</label>
 
                                 <div class="col-md-10">
-                                    <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{ $contact->description }}" required autocomplete="description" autofocus>
+                                    <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{ $product->description }}" required autocomplete="description" autofocus>
 
                                     @error('description')
                                         <span class="invalid-feedback" role="alert">
@@ -87,20 +87,6 @@
                                     <input id="unit_price" type="text" class="form-control @error('unit_price') is-invalid @enderror" name="unit_price" value="{{ $price->unit_price }}" required autocomplete="unit_price" autofocus>
 
                                     @error('unit_price')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="currency" class="col-md-2 col-form-label text-md-right">{{ __('Currency') }}</label>
-
-                                <div class="col-md-10">
-                                    <input id="currency" type="text" class="form-control @error('currency') is-invalid @enderror" name="currency" value="{{ $price->currency }}" required autocomplete="currency" autofocus>
-
-                                    @error('currency')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>

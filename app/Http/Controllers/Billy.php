@@ -59,7 +59,7 @@ class Billy extends Controller
 
 	    $res = $this->request("POST", "/{$type}", $body);
 
-	    return $res->{$type}[0]->id;
+	    return $res;
 	}
 
 

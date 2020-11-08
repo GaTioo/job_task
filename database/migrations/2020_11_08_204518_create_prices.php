@@ -19,7 +19,6 @@ class CreatePrices extends Migration
             $table->foreign('product_id')->references('id')->on('products');
             $table->string('external_id');
             $table->string('unit_price');
-            $table->string('currency');
             $table->timestamps();
         });
     }

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Price;
 use Illuminate\Http\Request;
+use DB;
 
 class ProductController extends Controller
 {
@@ -41,14 +43,37 @@ class ProductController extends Controller
 
         $billy = resolve('Billy');
 
-        $fields = $billy->billy_fields($request->all());
+        $product_fields = $billy->billy_fields(
+            array(
+                'name' => $request->name,
+                'product_no' => $request->product_no,
+                'description' => $request->description
+            )
+        );
+
+        $price_fields = $billy->billy_fields(
+            array(
+                'unit_price' => $request->unit_price,
+                'currencyId' => 'DKK'
+            )
+        );
 
         try {
-            $billy_id = $billy->create_object(array('product' => $fields), 'products');
 
-            $product->external_id = $billy_id;
+            $product_fields['prices'] = array($price_fields);
 
+            $billy_product = $billy->create_object(array('product' => $product_fields), 'products');
+
+            $product->external_id = $billy_product->products[0]->id;
             $product->save();
+
+            $price = new Price(array(
+                'product_id' => $product->id,
+                'external_id' => $billy_product->productPrices[0]->id,
+                'unit_price' => $request->unit_price
+            ));
+            $price->save();
+
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->withErrors(['exception' => $e->getMessage()]);
         }
@@ -65,8 +90,9 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::findOrFail($id);
+        $price = DB::table('prices')->where('product_id', '=', $product->id)->first();
 
-        return view('products.edit', compact('product'));
+        return view('products.edit', compact('product', 'price'));
     }
 
     /**
