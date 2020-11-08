@@ -13,7 +13,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        app()->bind('Billy', function() {
+            return new \App\Http\Controllers\Billy();
+        });
     }
 
     /**

@@ -21,7 +21,7 @@ class Billy extends Controller
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            "X-Access-Token: " . config('app.billy_api'),
+            "X-Access-Token: " . config('services.billy')['api'],
             "Content-Type: application/json"
         ));
 
@@ -88,7 +88,8 @@ class Billy extends Controller
 	    $res = $this->request("DELETE", "/contacts/{$id}");
 
 	    // return the deleted id
-	    return $res->meta->deletedRecords->contacts[0];
+	    // or just true, because can be already deleted
+	    return isset($res->meta->deletedRecords->contacts[0]) ? $res->meta->deletedRecords->contacts[0] : true;
 	}
 
 	/**

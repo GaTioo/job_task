@@ -30,4 +30,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'billy' => [
+        'api' => '35eebe5923417253f68e1cb2abb4eeb85c060277'
+    ]
+
 ];

@@ -39,7 +39,7 @@ class ContactController extends Controller
     {
     	$contact = new Contact($request->all());
 
-    	$billy = new Billy();
+    	$billy = resolve('Billy');
 
     	$fields = $this->billy_contact_fields($request->all());
 
@@ -82,7 +82,7 @@ class ContactController extends Controller
     {
     	$contact = Contact::findOrFail($id);
 
-    	$billy = new Billy();
+    	$billy = resolve('Billy');
 
     	$fields = $this->billy_contact_fields($request->all());
 
@@ -113,8 +113,8 @@ class ContactController extends Controller
 		// first try to delete
 		// from the Billy
 		try {
-			$billy = new Billy();
-			$billy_id = $billy->delete_contact($contact->external_id);
+			$billy = resolve('Billy');
+			$billy->delete_contact($contact->external_id);
 		} catch (Exception $e) {
 			return redirect()->back()->withInput()->withErrors(['exception' => $e->getMessage()]);
 		}
