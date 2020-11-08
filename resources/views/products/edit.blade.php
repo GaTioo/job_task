@@ -33,32 +33,16 @@
             <div class="row justify-content-center">
                 <div class="col-md-12">
                     <div class="card">
-                        <form method="POST" action="{{ route('products.update', $contact->id) }}">
+                        <form method="POST" action="{{ route('products.update', $product->id) }}">
                             @csrf
                             @method('PUT')
                             <br>
-                            <div class="form-group row">
-                                <label for="name" class="col-md-2 col-form-label text-md-right">{{ __('Type') }}</label>
-
-                                <div class="col-md-10">
-                                    <select id="type" class="form-control @error('name') is-invalid @enderror" name="type">
-                                        <option value="company">{{ __('Company') }}</option>
-                                        <option value="person">{{ __('Person') }}</option>
-                                    </select>
-
-                                    @error('name')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
 
                             <div class="form-group row">
                                 <label for="name" class="col-md-2 col-form-label text-md-right">{{ __('Name') }}</label>
 
                                 <div class="col-md-10">
-                                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $contact->name }}" required autocomplete="name" autofocus>
+                                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ $product->name }}" required autocomplete="name" autofocus>
 
                                     @error('name')
                                         <span class="invalid-feedback" role="alert">
@@ -69,12 +53,12 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="country_id" class="col-md-2 col-form-label text-md-right">{{ __('Country') }}</label>
+                                <label for="product_no" class="col-md-2 col-form-label text-md-right">{{ __('Product No') }}</label>
 
                                 <div class="col-md-10">
-                                    <input id="country_id" type="text" class="form-control @error('country_id') is-invalid @enderror" name="country_id" value="{{ $contact->country_id }}" required autocomplete="country_id" autofocus>
+                                    <input id="product_no" type="text" class="form-control @error('product_no') is-invalid @enderror" name="product_no" value="{{ $contact->product_no }}" required autocomplete="product_no" autofocus>
 
-                                    @error('country_id')
+                                    @error('product_no')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -83,12 +67,40 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="payment_terms_days" class="col-md-2 col-form-label text-md-right">{{ __('Payment Terms Days') }}</label>
+                                <label for="description" class="col-md-2 col-form-label text-md-right">{{ __('Description') }}</label>
 
                                 <div class="col-md-10">
-                                    <input id="payment_terms_days" type="text" class="form-control @error('payment_terms_days') is-invalid @enderror" name="payment_terms_days" value="{{ $contact->payment_terms_days }}" required autocomplete="payment_terms_days" autofocus>
+                                    <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{ $contact->description }}" required autocomplete="description" autofocus>
 
-                                    @error('payment_terms_days')
+                                    @error('description')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="unit_price" class="col-md-2 col-form-label text-md-right">{{ __('Unit Price') }}</label>
+
+                                <div class="col-md-10">
+                                    <input id="unit_price" type="text" class="form-control @error('unit_price') is-invalid @enderror" name="unit_price" value="{{ $price->unit_price }}" required autocomplete="unit_price" autofocus>
+
+                                    @error('unit_price')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="currency" class="col-md-2 col-form-label text-md-right">{{ __('Currency') }}</label>
+
+                                <div class="col-md-10">
+                                    <input id="currency" type="text" class="form-control @error('currency') is-invalid @enderror" name="currency" value="{{ $price->currency }}" required autocomplete="currency" autofocus>
+
+                                    @error('currency')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
