@@ -16,7 +16,7 @@
             <a href="/contacts" class="alert-link">All contacts</a> |
             <a href="/contacts/create" class="alert-link">Add contacts</a> |
             <a href="/products" class="alert-link">All products</a> |
-            <a href="/products/create" class="alert-link">Add contacts</a>
+            <a href="/products/create" class="alert-link">Add products</a>
         </div>
     </body>
 </html>
