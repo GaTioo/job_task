@@ -94,6 +94,20 @@
                                 </div>
                             </div>
 
+                            <div class="form-group row">
+                                <label for="currency" class="col-md-2 col-form-label text-md-right">{{ __('Currency') }}</label>
+
+                                <div class="col-md-10">
+                                    <input id="currency" type="text" class="form-control @error('currency') is-invalid @enderror" name="currency" value="{{ $price->currency }}" required autocomplete="currency" autofocus>
+
+                                    @error('currency')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
                             <div class="form-group row mb-0">
                                 <div class="col-md-8 offset-md-5">
                                     <a href="{{ route('products.index') }}" class="btn btn-warning">

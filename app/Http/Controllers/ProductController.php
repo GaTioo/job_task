@@ -54,7 +54,7 @@ class ProductController extends Controller
         $price_fields = $billy->billy_fields(
             array(
                 'unit_price' => $request->unit_price,
-                'currencyId' => 'DKK'
+                'currencyId' => $request->currency
             )
         );
 
@@ -70,7 +70,8 @@ class ProductController extends Controller
             $price = new Price(array(
                 'product_id' => $product->id,
                 'external_id' => $billy_product->productPrices[0]->id,
-                'unit_price' => $request->unit_price
+                'unit_price' => $request->unit_price,
+                'currency' => $request->currency
             ));
             $price->save();
 
@@ -108,14 +109,32 @@ class ProductController extends Controller
 
         $billy = resolve('Billy');
 
-        $fields = $billy->billy_fields($request->all());
+        $product_fields = $billy->billy_fields(
+            array(
+                'name' => $request->name,
+                'product_no' => $request->product_no,
+                'description' => $request->description
+            )
+        );
+
+        $price_fields = $billy->billy_fields(
+            array(
+                'unit_price' => $request->unit_price,
+                'currencyId' => $request->currency
+            )
+        );
 
         try {
-            $billy_id = $billy->update_object(array('contact' => $fields), $product->external_id, 'products');
+
+            $product_fields['prices'] = array($price_fields);
+
+            $billy_id = $billy->update_object(array('product' => $product_fields), $product->external_id, 'products');
 
             $product->fill($request->all());
 
             $product->save();
+
+            DB::table('prices')->where('product_id', $product->id)->update(['unit_price' => $request->unit_price, 'currency' => $request->currency]);
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->withErrors(['exception' => $e->getMessage()]);
         }
