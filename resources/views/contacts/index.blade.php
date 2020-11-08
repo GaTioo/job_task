@@ -13,13 +13,29 @@
     </head>
     <body class="antialiased">
         <div class="alert alert-primary" role="alert">
-            <a href="#" class="alert-link">All contacts</a> |
-            <a href="#" class="alert-link">Add contacts</a> |
-            <a href="#" class="alert-link">All products</a> |
-            <a href="#" class="alert-link">Add contacts</a>
+            <a href="/contacts" class="alert-link">All contacts</a> |
+            <a href="/contacts/create" class="alert-link">Add contacts</a> |
+            <a href="/products" class="alert-link">All products</a> |
+            <a href="/products/create" class="alert-link">Add contacts</a>
         </div>
 
-        
-        
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="card">
+                        @forelse ($contacts as $contact)
+                            <div class="card-body">
+                                <h5 class="card-title"><a href="/contacts/{{$contact->id}}/edit">{{$contact->name}}</a></h5>
+                            </div>
+                        @empty
+                            <div class="card-body">
+                                <p class="card-text">Contacts list is empty.</p>
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </body>
 </html>

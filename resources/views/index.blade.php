@@ -13,10 +13,10 @@
     </head>
     <body class="antialiased">
         <div class="alert alert-primary" role="alert">
-            <a href="#" class="alert-link">All contacts</a> |
-            <a href="#" class="alert-link">Add contacts</a> |
-            <a href="#" class="alert-link">All products</a> |
-            <a href="#" class="alert-link">Add contacts</a>
+            <a href="/contacts" class="alert-link">All contacts</a> |
+            <a href="/contacts/create" class="alert-link">Add contacts</a> |
+            <a href="/products" class="alert-link">All products</a> |
+            <a href="/products/create" class="alert-link">Add contacts</a>
         </div>
     </body>
 </html>

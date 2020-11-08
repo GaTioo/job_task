@@ -17,5 +17,5 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::resource('contacts', 'ContactController');
-Route::resource('products', 'ProductController');
+Route::resource('contacts', App\Http\Controllers\ContactController::class);
+Route::resource('products', App\Http\Controllers\ProductController::class);

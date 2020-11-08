@@ -18,7 +18,6 @@ class CreateContactsTable extends Migration
             $table->string('external_id');
             $table->enum('type', ['company', 'person'])->default('company');
             $table->string('organization_id');
-            $table->timestamp('created_time', 0);
             $table->string('name');
             $table->string('country_id');
             $table->string('street')->nullable();
@@ -42,6 +41,7 @@ class CreateContactsTable extends Migration
             $table->string('access_code')->nullable();
             $table->string('email_attachment_delivery_mode')->nullable();
             $table->boolean('is_archived')->nullable();
+            $table->timestamps();
         });
     }
 
