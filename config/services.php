@@ -31,7 +31,7 @@ return [
     ],
 
     'billy' => [
-        'api' => '35eebe5923417253f68e1cb2abb4eeb85c060277'
+        'api' => env('BILLY_API_KEY')
     ]
 
 ];
