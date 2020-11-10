@@ -10,8 +10,9 @@
 ## Installation
 
 To run the application there are just few steps.
+ - Checkout the repo and run "composer install" in the directory
  - Rename ".env.example" to ".env" and edit DB connection
- - In the same ".env" file add at the end of the file "BILLY_API_KEY=API_KEY" where API_KEY is your api key
+ - In the same ".env" file add at the end of the file "BILLY_API_KEY=API_KEY" where API_KEY is your api key.
  - In project folder run "php artisan key:generate"
  - In project folder run "php artisan migrate"
  - Run "php artisan serve" and open the returned IP in the browser.
