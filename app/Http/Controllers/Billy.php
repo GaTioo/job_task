@@ -134,7 +134,7 @@ class Billy extends Controller
 	/**
 	 * Prepare billy fields
 	 * to be ready for update/insert
-	 * in out system
+	 * in our system
 	 *
 	 * @param object $object
 	 * @param string $action
@@ -359,7 +359,7 @@ class Billy extends Controller
 
 					$product->save();
 
-					// update external_id of prics in the system
+					// update external_id of prices in the system
 					foreach ($billy_product->productPrices as $result_prices) {
 						Price::where('currency_id', '=', $result_prices->currencyId)
 							->where('unit_price', '=', $result_prices->unitPrice)
