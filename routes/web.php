@@ -19,3 +19,5 @@ Route::get('/', function () {
 
 Route::resource('contacts', App\Http\Controllers\ContactController::class);
 Route::resource('products', App\Http\Controllers\ProductController::class);
+
+Route::get('/sync_contacts', [Billy::class, 'sync_contacts']);

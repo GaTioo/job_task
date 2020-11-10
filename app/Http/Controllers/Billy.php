@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Contact;
 
 class Billy extends Controller
 {
@@ -124,6 +125,70 @@ class Billy extends Controller
 		}
 
 		return $prepared_fields;
+
+	}
+
+	/**
+	 * Prepare billy fields
+	 * to be ready for update/insert
+	 * in out system
+	 *
+	 * @param object $contact
+	 * @param string $action
+	 * @return array $fields
+	 */
+	public function billy_to_sytem_fields($contact, $action){
+
+		// make id to be external_id
+		$contact->external_id = $contact->id;
+		unset($contact->id);
+
+		// if it's update remove createdTime
+		if ('update' == $action) {
+			unset($contact->createdTime);
+		} else {
+			// changing also createdTime to created_at
+			$contact->created_at = $contact->createdTime;
+			unset($contact->createdTime);
+		}
+
+		$fields = array();
+
+		// the real conversion
+		// contactId to become contact_id
+		foreach ($contact as $key => $value) {
+			$fields[strtolower((preg_replace('/\B([A-Z])/', '_$1', $key)))] = $value;
+		}
+
+		return $fields;	
+	}
+
+	/**
+	 * Sync all contacts from Billy
+	 */
+	public function sync_contacts() {
+
+		// do the request to get all contacts
+		$all_contacts = $this->request('GET', '/contacts');
+
+		// loop all returned contacts
+		foreach ($all_contacts->contacts as $contact) {
+
+			// if there is aleady such contact
+			// in our db, update if
+			if ($find = Contact::where('external_id', '=', $contact->id)->first()) {
+				$fields = $this->billy_to_sytem_fields($contact, 'update');
+				$find->fill($fields);
+				$find->save();
+			} else {
+				// if not - create it
+				$fields = $this->billy_to_sytem_fields($contact, 'insert');
+				$contact = new Contact($fields);
+				$contact->save();
+			}
+		}
+
+		return redirect('/contacts');
 
 	}
 

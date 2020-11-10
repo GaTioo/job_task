@@ -7,6 +7,15 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Installation
+
+To run the application there are just few steps.
+ - First change the API key located at config/services.php at 34 line
+ - Rename ".env.example" to ".env" and edit DB connection
+ - In project folder run "php artisan key:generate"
+ - In project foldr run "php artisan migrate"
+ - Application is ready to run.
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
