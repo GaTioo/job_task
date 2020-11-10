@@ -13,7 +13,8 @@ To run the application there are just few steps.
  - First change the API key located at config/services.php at 34 line
  - Rename ".env.example" to ".env" and edit DB connection
  - In project folder run "php artisan key:generate"
- - In project foldr run "php artisan migrate"
+ - In project folder run "php artisan migrate"
+ - Run "php artisan serve" and open the returned IP in the browser.
  - Application is ready to run.
 
 ## About Laravel
