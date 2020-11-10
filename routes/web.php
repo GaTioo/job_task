@@ -20,5 +20,8 @@ Route::get('/', function () {
 Route::resource('contacts', App\Http\Controllers\ContactController::class);
 Route::resource('products', App\Http\Controllers\ProductController::class);
 
-Route::get('/sync_contacts', [Billy::class, 'sync_contacts']);
-Route::get('/sync_products', [Billy::class, 'sync_products']);
+Route::get('/sync_contacts_from', [Billy::class, 'sync_contacts_from']);
+Route::get('/sync_products_from', [Billy::class, 'sync_products_from']);
+
+Route::get('/sync_contacts_to', [Billy::class, 'sync_contacts_to']);
+Route::get('/sync_products_to', [Billy::class, 'sync_products_to']);

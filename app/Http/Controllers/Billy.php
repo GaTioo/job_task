@@ -171,7 +171,7 @@ class Billy extends Controller
 	/**
 	 * Sync all contacts from Billy
 	 */
-	public function sync_contacts() {
+	public function sync_contacts_from() {
 
 		// do the request to get all contacts
 		$all_contacts = $this->request('GET', '/contacts');
@@ -200,7 +200,7 @@ class Billy extends Controller
 	/**
 	 * Sync all products and prices from Billy
 	 */
-	public function sync_products() {
+	public function sync_products_from() {
 
 		// do the request to get all products
 		$all_products = $this->request('GET', '/products');
@@ -246,6 +246,190 @@ class Billy extends Controller
 
 		return redirect('/products');
 
+	}
+
+
+	/**
+	 * Sync all contacts to Billy
+	 * Update or create contacts 
+	 * in Billy with data from the system
+	 *
+	 * Could be added try catch and to 
+	 * return status which objects
+	 * were updated and which not
+	 */
+	public function sync_contacts_to() {
+
+		$billy = resolve('Billy');
+
+		// get all contacts from the db
+		$all_contacts = Contact::all();
+
+		// loop all returned contacts
+		foreach ($all_contacts as $contact) {
+
+			// get object fields and clear not yet used ones
+			// I didn't implement all fields in the UI
+			$to_array = $this->clear_contact_fields($contact->toArray());
+
+		    // prepare billy fields
+			$fields = $billy->billy_fields($to_array);
+
+			// its possible contact to not have external id
+			// which means its not created in Billy
+			// so we need to create it in Billy API
+			if (empty($contact->external_id)) {
+
+			        // create contact in billy
+					$billy_contact = $billy->create_object(
+			            array('contact' => $fields),
+			            'contacts'
+			        );
+
+			        // set external_id with id from the newly created contact
+					$contact->external_id = $billy_contact->contacts[0]->id;
+
+					$contact->save();
+			} else {
+					// just update the record
+					$billy_contact = $billy->update_object(
+			            array('contact' => $fields),
+			            $contact->external_id,
+			            'contacts'
+			        );
+			}
+		}
+
+		return redirect('/contacts');
+
+	}
+
+	/**
+	 * Sync all products to Billy
+	 * Update or create products 
+	 * in Billy with data from the system
+	 *
+	 * Could be added try catch and to 
+	 * return status which objects
+	 * were updated and which not
+	 */
+	public function sync_products_to() {
+
+		$billy = resolve('Billy');
+
+		// get all products from the db
+		$all_products = Product::all();
+
+		// loop all returned contacts
+		foreach ($all_products as $product) {
+
+			// prepare price fields
+			$price_fields = array();
+			foreach ($product->prices as $pprice) {
+				$price_fields[] = $billy->billy_fields(
+		            array(
+		                'unit_price' => $pprice->unit_price,
+		                'currency_id' => $pprice->currency_id
+		            )
+		        );
+			}
+
+			// get object fields and clear not yet used ones
+			// I didn't implement all fields in the UI
+			$to_array = $this->clear_product_fields($product->toArray());
+
+		    // prepare billy fields
+			$fields = $billy->billy_fields($to_array);
+
+			$fields['prices'] = $price_fields;
+
+			// its possible product to not have external id
+			// which means its not created in Billy
+			// so we need to create it in Billy API
+			if (empty($product->external_id)) {
+
+			        // create product in billy
+					$billy_product = $billy->create_object(
+			            array('product' => $fields),
+			            'products'
+			        );
+
+			        // set external_id with id from the newly created product
+					$product->external_id = $billy_product->products[0]->id;
+
+					$product->save();
+
+					// update external_id of prics in the system
+					foreach ($billy_product->productPrices as $result_prices) {
+						Price::where('currency_id', '=', $result_prices->currencyId)
+							->where('unit_price', '=', $result_prices->unitPrice)
+							->where('product_id', '=', $product->id)
+							->update(array('external_id' => $result_prices->id));
+					}
+
+			} else {
+					// just update the record
+					$billy_product = $billy->update_object(
+			            array('product' => $fields),
+			            $product->external_id,
+			            'products'
+			        );
+			}
+		}
+
+		return redirect('/products');
+
+	}
+
+	/**
+	 * Clear unused fields
+	 * to prevent validation errors from Billy
+	 * this can be changed in the future
+	 *
+	 * @param array $data
+	 * @return array $data
+	 */
+	private function clear_contact_fields(array $data) {
+
+		unset($data['id']);
+		unset($data['external_id']);
+		unset($data['updated_at']);
+		unset($data['created_at']);
+		unset($data['organization_id']);
+		unset($data['locale_id']);
+		unset($data['default_expense_account_id']);
+		unset($data['is_sales_tax_exempt']);
+		unset($data['payment_terms_mode']);
+		unset($data['email_attachment_delivery_mode']);
+
+		return $data;
+	}
+
+	/**
+	 * Clear unused fields
+	 * to prevent validation errors from Billy
+	 * this can be changed in the future
+	 *
+	 * @param array $data
+	 * @return array $data
+	 */
+	private function clear_product_fields(array $data) {
+
+		unset($data['id']);
+		unset($data['external_id']);
+		unset($data['updated_at']);
+		unset($data['created_at']);
+		unset($data['organization_id']);
+		unset($data['account_id']);
+		unset($data['suppliers_product_no']);
+		unset($data['sales_tax_ruleset_id']);
+		unset($data['is_archived']);
+		unset($data['is_in_inventory']);
+		unset($data['image_id']);
+		unset($data['image_url']);
+		unset($data['inventory_account_id']);
+
+		return $data;
 	}
 
 }

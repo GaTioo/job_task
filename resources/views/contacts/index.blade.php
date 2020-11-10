@@ -19,7 +19,8 @@
             <a href="/products/create" class="alert-link">Add products</a>
         </div>
 
-        <a href="/sync_contacts" class="btn btn-primary">Sync Contacts</a>
+        <a href="/sync_contacts_from" class="btn btn-primary">Sync Contacts from Billy</a>
+        <a href="/sync_contacts_to" class="btn btn-primary">Sync Contacts to Billy</a><br><br>
 
         @if ($errors->any())
         <div class="alert alert-danger">
