@@ -41,11 +41,18 @@ class ContactController extends Controller
 
     	$billy = resolve('Billy');
 
+        // prepare billy fields
     	$fields = $billy->billy_fields($request->all());
 
     	try {
-    		$billy_contact = $billy->create_object(array('contact' => $fields), 'contacts');
 
+            // create contact in billy
+    		$billy_contact = $billy->create_object(
+                array('contact' => $fields),
+                'contacts'
+            );
+
+            // set external_id with id from the newly created contact
     		$contact->external_id = $billy_contact->contacts[0]->id;
 
     		$contact->save();
@@ -65,7 +72,7 @@ class ContactController extends Controller
      */
     public function edit($id)
     {
-    	$contact =  Contact::findOrFail($id);
+    	$contact = Contact::findOrFail($id);
 
         return view('contacts.edit', compact('contact'));
     }
@@ -83,11 +90,20 @@ class ContactController extends Controller
 
     	$billy = resolve('Billy');
 
+        // prepare the fields
     	$fields = $billy->billy_fields($request->all());
 
     	try {
-    		$billy_id = $billy->update_object(array('contact' => $fields), $contact->external_id, 'contacts');
 
+            // update the contact in billy
+    		$billy_id = $billy->update_object(
+                array('contact' => $fields),
+                $contact->external_id,
+                'contacts'
+            );
+
+            // fill the object with data
+            // from the request
     		$contact->fill($request->all());
 
     		$contact->save();

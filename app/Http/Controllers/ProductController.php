@@ -32,7 +32,8 @@ class ProductController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create product in DB
+     * and in the Billy
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -62,11 +63,17 @@ class ProductController extends Controller
 
             $product_fields['prices'] = array($price_fields);
 
-            $billy_product = $billy->create_object(array('product' => $product_fields), 'products');
+            // create product in billy
+            $billy_product = $billy->create_object(
+                array('product' => $product_fields),
+                'products'
+            );
 
+            // set the external_id which is id from billy
             $product->external_id = $billy_product->products[0]->id;
             $product->save();
 
+            // insert the price
             $price = new Price(array(
                 'product_id' => $product->id,
                 'external_id' => $billy_product->productPrices[0]->id,
@@ -97,7 +104,8 @@ class ProductController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the product in the system
+     * and in the Billy
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -105,10 +113,12 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // find the product
         $product = Product::findOrFail($id);
 
         $billy = resolve('Billy');
 
+        // prepare product fields
         $product_fields = $billy->billy_fields(
             array(
                 'name' => $request->name,
@@ -117,6 +127,7 @@ class ProductController extends Controller
             )
         );
 
+        // prepare price fields
         $price_fields = $billy->billy_fields(
             array(
                 'unit_price' => $request->unit_price,
@@ -126,15 +137,29 @@ class ProductController extends Controller
 
         try {
 
+            // add price fields
+            // in the products
             $product_fields['prices'] = array($price_fields);
 
-            $billy_id = $billy->update_object(array('product' => $product_fields), $product->external_id, 'products');
+            // update product
+            // in billy
+            $billy_id = $billy->update_object(
+                array('product' => $product_fields),
+                $product->external_id,
+                'products'
+            );
 
+            // fill the object
+            // with data from the form
             $product->fill($request->all());
 
+            // save the product
             $product->save();
 
-            DB::table('prices')->where('product_id', $product->id)->update(['unit_price' => $request->unit_price, 'currency' => $request->currency]);
+            // update the price
+            DB::table('prices')
+                ->where('product_id', $product->id)
+                ->update(['unit_price' => $request->unit_price, 'currency' => $request->currency]);
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->withErrors(['exception' => $e->getMessage()]);
         }
@@ -161,7 +186,7 @@ class ProductController extends Controller
             return redirect()->back()->withInput()->withErrors(['exception' => $e->getMessage()]);
         }
 
-        // delete in system db
+        // then delete in system db
         $product->delete();
 
         return redirect('/products');
