@@ -53,8 +53,8 @@
                         @endforelse
                     </div>
                 </div>
+                {{ $contacts->links() }}
             </div>
         </div>
-
     </body>
 </html>

@@ -25,6 +25,8 @@ class AddCurrencyColumn extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('prices', function (Blueprint $table) {
+            $table->dropColumn('currency');
+        });
     }
 }

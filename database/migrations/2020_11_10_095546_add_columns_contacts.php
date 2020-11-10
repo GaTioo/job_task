@@ -28,6 +28,11 @@ class AddColumnsContacts extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('contacts', function (Blueprint $table) {
+            $table->dropColumn('is_sales_tax_exempt');
+            $table->dropColumn('default_expense_product_description');
+            $table->dropColumn('default_expense_account_id');
+            $table->dropColumn('default_tax_rate_id');
+        });
     }
 }

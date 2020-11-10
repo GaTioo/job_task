@@ -25,6 +25,8 @@ class ModifyProductsPrices extends Migration
      */
     public function down()
     {
-        $table->string('prices')->change();
+        Schema::table('products', function (Blueprint $table) {
+            $table->string('prices')->change();
+        });
     }
 }

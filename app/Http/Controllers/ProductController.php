@@ -55,7 +55,7 @@ class ProductController extends Controller
         $price_fields = $billy->billy_fields(
             array(
                 'unit_price' => $request->unit_price,
-                'currencyId' => $request->currency
+                'currency_id' => $request->currency_id
             )
         );
 
@@ -78,7 +78,7 @@ class ProductController extends Controller
                 'product_id' => $product->id,
                 'external_id' => $billy_product->productPrices[0]->id,
                 'unit_price' => $request->unit_price,
-                'currency' => $request->currency
+                'currency_id' => $request->currency_id
             ));
             $price->save();
 
@@ -131,7 +131,7 @@ class ProductController extends Controller
         $price_fields = $billy->billy_fields(
             array(
                 'unit_price' => $request->unit_price,
-                'currencyId' => $request->currency
+                'currencyId' => $request->currency_id
             )
         );
 
@@ -159,7 +159,7 @@ class ProductController extends Controller
             // update the price
             DB::table('prices')
                 ->where('product_id', $product->id)
-                ->update(['unit_price' => $request->unit_price, 'currency' => $request->currency]);
+                ->update(['unit_price' => $request->unit_price, 'currency_id' => $request->currency_id]);
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->withErrors(['exception' => $e->getMessage()]);
         }

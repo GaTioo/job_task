@@ -19,6 +19,8 @@
             <a href="/products/create" class="alert-link">Add products</a>
         </div>
 
+        <a href="/sync_products" class="btn btn-primary">Sync Products</a>
+
         @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -51,6 +53,7 @@
                         @endforelse
                     </div>
                 </div>
+                {{ $products->links() }}
             </div>
         </div>
 

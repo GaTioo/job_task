@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ModifyPaymentDays extends Migration
+class ModifyPricesColumn extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class ModifyPaymentDays extends Migration
      */
     public function up()
     {
-        Schema::table('contacts', function (Blueprint $table) {
-            $table->string('payment_terms_days')->nullable()->change();
+        Schema::table('prices', function (Blueprint $table) {
+            $table->renameColumn('currency', 'currency_id');
         });
     }
 
@@ -25,8 +25,8 @@ class ModifyPaymentDays extends Migration
      */
     public function down()
     {
-        Schema::table('contacts', function (Blueprint $table) {
-            $table->string('payment_terms_days')->change();
+        Schema::table('prices', function (Blueprint $table) {
+            $table->renameColumn('currency_id', 'currency');
         });
     }
 }

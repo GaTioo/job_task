@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Contact;
+use App\Models\Product;
+use App\Models\Price;
+use DB;
 
 class Billy extends Controller
 {
@@ -133,30 +136,32 @@ class Billy extends Controller
 	 * to be ready for update/insert
 	 * in out system
 	 *
-	 * @param object $contact
+	 * @param object $object
 	 * @param string $action
 	 * @return array $fields
 	 */
-	public function billy_to_sytem_fields($contact, $action){
+	public function billy_to_system_fields($object, $action){
 
 		// make id to be external_id
-		$contact->external_id = $contact->id;
-		unset($contact->id);
+		$object->external_id = $object->id;
+		unset($object->id);
 
 		// if it's update remove createdTime
 		if ('update' == $action) {
-			unset($contact->createdTime);
+			unset($object->createdTime);
 		} else {
 			// changing also createdTime to created_at
-			$contact->created_at = $contact->createdTime;
-			unset($contact->createdTime);
+			if (isset($object->createdTime)) {
+				$object->created_at = $object->createdTime;
+				unset($object->createdTime);
+			}
 		}
 
 		$fields = array();
 
 		// the real conversion
-		// contactId to become contact_id
-		foreach ($contact as $key => $value) {
+		// objectId to become object_id
+		foreach ($object as $key => $value) {
 			$fields[strtolower((preg_replace('/\B([A-Z])/', '_$1', $key)))] = $value;
 		}
 
@@ -177,18 +182,69 @@ class Billy extends Controller
 			// if there is aleady such contact
 			// in our db, update if
 			if ($find = Contact::where('external_id', '=', $contact->id)->first()) {
-				$fields = $this->billy_to_sytem_fields($contact, 'update');
+				$fields = $this->billy_to_system_fields($contact, 'update');
 				$find->fill($fields);
 				$find->save();
 			} else {
 				// if not - create it
-				$fields = $this->billy_to_sytem_fields($contact, 'insert');
+				$fields = $this->billy_to_system_fields($contact, 'insert');
 				$contact = new Contact($fields);
 				$contact->save();
 			}
 		}
 
 		return redirect('/contacts');
+
+	}
+
+	/**
+	 * Sync all products and prices from Billy
+	 */
+	public function sync_products() {
+
+		// do the request to get all products
+		$all_products = $this->request('GET', '/products');
+		// loop all returned products
+		foreach ($all_products->products as $product) {
+
+			// get all prices for the product
+			$prices = $this->request('GET', '/productPrices?productId=' . $product->id);
+
+			// if there is aleady such product
+			// in our db, update it
+			if ($find = Product::where('external_id', '=', $product->id)->first()) {
+				$fields = $this->billy_to_system_fields($product, 'update');
+				$find->fill($fields);
+				$find->save();
+
+				// update the price
+				DB::table('prices')
+				    ->where('product_id', $find->id)
+				    ->delete();
+
+				foreach ($prices->productPrices as $p_price) {
+					$fields = $this->billy_to_system_fields($p_price, 'insert');
+					$fields['product_id'] = $find->id;
+					$new_price = new Price($fields);
+					$new_price->save();
+				}
+
+			} else {
+				// if not - create it
+				$fields = $this->billy_to_system_fields($product, 'insert');
+				$new_product = new Product($fields);
+				$new_product->save();
+
+				foreach ($prices->productPrices as $p_price) {
+					$fields = $this->billy_to_system_fields($p_price, 'insert');
+					$fields['product_id'] = $new_product->id;
+					$new_price = new Price($fields);
+					$new_price->save();
+				}
+			}
+		}
+
+		return redirect('/products');
 
 	}
 

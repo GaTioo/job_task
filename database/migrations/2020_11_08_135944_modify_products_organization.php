@@ -25,6 +25,8 @@ class ModifyProductsOrganization extends Migration
      */
     public function down()
     {
-        $table->string('organization_id')->change();
+        Schema::table('products', function (Blueprint $table) {
+            $table->string('organization_id')->change();
+        });
     }
 }

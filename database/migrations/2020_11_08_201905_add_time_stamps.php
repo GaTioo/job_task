@@ -25,7 +25,9 @@ class AddTimeStamps extends Migration
      */
     public function down()
     {
-        $table->dropColumn('updated_at');
-        $table->dropColumn('created_at');
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn('updated_at');
+            $table->dropColumn('created_at');
+        });
     }
 }

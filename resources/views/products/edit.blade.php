@@ -95,12 +95,12 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="currency" class="col-md-2 col-form-label text-md-right">{{ __('Currency') }}</label>
+                                <label for="currency_id" class="col-md-2 col-form-label text-md-right">{{ __('Currency') }}</label>
 
                                 <div class="col-md-10">
-                                    <input id="currency" type="text" class="form-control @error('currency') is-invalid @enderror" name="currency" value="{{ $price->currency }}" required autocomplete="currency" autofocus>
+                                    <input id="currency_id" type="text" class="form-control @error('currency_id') is-invalid @enderror" name="currency_id" value="{{ $price->currency_id }}" required autocomplete="currency_id" autofocus>
 
-                                    @error('currency')
+                                    @error('currency_id')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -114,7 +114,7 @@
                                         {{ __('Cancel') }}
                                     </a>
                                     <button type="submit" class="btn btn-primary">
-                                        {{ __('Create') }}
+                                        {{ __('Save') }}
                                     </button>
                                 </div>
                             </div>

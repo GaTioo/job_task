@@ -25,6 +25,8 @@ class ModifyContactsOrganization extends Migration
      */
     public function down()
     {
-        $table->string('organization_id')->change();
+        Schema::table('contacts', function (Blueprint $table) {
+            $table->string('organization_id')->change();
+        });
     }
 }
